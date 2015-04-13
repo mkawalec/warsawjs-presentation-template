@@ -23,106 +23,160 @@
             </div>
             <div class="content">
                 <h2>WarsawJS Presentation Template</h2>
-                <p>Author Name <a href="http://twitter.com/author">@author</a>
+                <p>Michał Kawalec <a href="http://twitter.com/b4zzl3">@b4zzl3</a>
             </div>
         </div>
     </section>
 
-    <section class="slide">
+    <section class='slide'>
         <div>
-            <h2>Plain Text on Your Slides</h2>
+            <h2>What's isomorphism?</h2>
+            <p>The idea that you can run <b>the same</b> code both on the client and server. 
+            Many people have different things in mind when they speak of isomorphism, there
+            are two main kinds:</p>
 
-            <p>Lorem ipsum dolor sit amet, consectetur <a href="#4">adipisicing</a> elit, sed do eiusmod tempor incididunt
-                ut labore et dolore magna aliqua. Ut enim ad minim veniam, <em>quis nostrud</em> exercitation ullamco
-                laboris <strong>nisi ut aliquip</strong> ex ea commodo consequat. Duis aute irure <i>dolor</i> in
-                reprehenderit in voluptate velit esse cillum <b>dolore</b> eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in <code>&lt;culpa&gt;</code> qui officia deserunt mollit anim id est laborum.
-            </p>
+            <ul>
+                <li>'weak' (aka lodash) where the code can be executed in both envs, like when you can include lodash both on the client and the server</li>
+                <li>'strong' (in FluxApp) where the same code is executed on the client and the server (semi) transparently to the programmer</li>
+            </ul>
         </div>
     </section>
 
-    <section class="slide">
+    <section class='slide'>
         <div>
-            <h2>All Kind of Lists</h2>
-            <ol>
-                <li>Simple lists are marked with bullets</li>
-                <li>Ordered lists begin with a number</li>
-                <li>You can even nest lists one inside another
-                    <ul>
-                        <li>Or mix their types</li>
-                        <li>But do not go too far</li>
-                        <li>Otherwise audience will be bored</li>
-                    </ul>
-                </li>
-                <li>Look, seven rows exactly!</li>
-            </ol>
+            <h2>Advantages of strong isomorphism</h2>
+            <ul>
+                <li>Page is loaded instantly the first time, no reload required afterwards</li>
+                <li>(supposedly) better SEO.</li>
+                <li>Some support for people with no JS, your mileage may vary here</li>
+            </ul>
         </div>
     </section>
 
-    <section class="slide">
+    <section class='slide'>
         <div>
-            <h2>JavaScript Samples</h2>
-            <pre>
-                <code><mark class="comment">// Crockford style IIFE</mark></code>
-                <code>(function () {</code>
-                <code>  var <mark>someVar</mark> = 'value';</code>
-                <code>  console.<mark class="important">log</mark>(someVar);</code>
-                <code>}());</code>
-            </pre>
-        </div>
-    </section>
-    <section class="slide">
-        <div>
-            <h2>Even Tables</h2>
-            <table>
-                <tr>
-                    <th scope="col">Locavore</th>
-                    <th>Umami</th>
-                    <th>Helvetica</th>
-                    <th>Vegan</th>
-                </tr>
-                <tr>
-                    <th scope="row">Fingerstache</th>
-                    <td>Kale</td>
-                    <td>Chips</td>
-                    <td>Keytar</td>
-                </tr>
-                <tr>
-                    <th scope="row">Sriracha</th>
-                    <td>Gluten-free</td>
-                    <td>Ennui</td>
-                    <td>Keffiyeh</td>
-                </tr>
-                <tr>
-                    <th scope="row">Thundercats</th>
-                    <td>Jean</td>
-                    <td>Shorts</td>
-                    <td>Biodiesel</td>
-                </tr>
-                <tr>
-                    <th scope="row">Terry</th>
-                    <td>Richardson</td>
-                    <td>Swag</td>
-                    <td>Blog</td>
-                </tr>
-            </table>
-            <p>It’s good to have information organized.</p>
+            <h2>The state of isomorphism</h2>
+            <p>When we started there was a desert. Now there are some frameworks, 
+            but nothing focused on React+Flux. We also want to make the abstraction
+            as thin as possible to give most power to the programmer.</p>
         </div>
     </section>
 
     <section class="slide cover">
         <div>
-            <img src="./themes/warsawjs/pictures/bigphoto.jpg" alt="">
+            <img src="./drawing.png" alt="">
         </div>
     </section>
 
-    <section class="slide shout">
+    <section class='slide'>
         <div>
-            <h2>See you next month at WarsawJS</h2>
+            <h2>Action lifetime</h2>
+            <table>
+                <tr>
+                    <th scope="col">Dispatch phase</th>
+                    <th>Sync action</th>
+                    <th>Async action</th>
+                </tr>
+                <tr>
+                    <th scope="row">Before</th>
+                    <td></td>
+                    <td><code>namespace.action:before</code></td>
+                </tr>
+                <tr>
+                    <th scope="row">Action</th>
+                    <td><code>namespace.action</code> or <code>namespace.action:failed</code></td>
+                    <td><code>namespace.action</code> or <code>namespace.action:failed</code></td>
+                </tr>
+                <tr>
+                    <th scope="row">After</th>
+                    <td></td>
+                    <td><code>namespace.action:after</code></td>
+                </tr>
+            </table>
         </div>
     </section>
 
-    <p class="badge"><a href="https://github.com/warsawjs/presentation-template">Fork me on Github</a></p>
+    <section class='slide'>
+        <div>
+            <h3>Stores</h3>
+            <figure>
+            <pre>
+                <code>export default fluxApp.createStore('posts', {</code>
+                <code>  actions: { onGetAll: 'posts.getAll' },</code>
+
+                <code>  getIntialState() {</code>
+                <code>    return { posts: [] };</code>
+                <code>  },</code>
+
+                <code>  onGetAll(posts) { this.setState({ posts }); }</code>
+                <code>});</code>
+            </pre>
+
+                <figcaption><code>manifold/stores/posts.js</code></figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <section class='slide'>
+        <div>
+            <h2>Load phase</h2>
+            <p>We expect any route-bound component to provide a 
+            <code>statics.load</code> function to load data into stores like:</p>
+
+            <figure>
+            <pre>
+                <code>load(route, fluxApp) {</code>
+                <code>  return RequireLogin.applyAuth(fluxApp).then(</code>
+                <code>    () => fluxapp.getActions('posts').getAll()</code>
+                <code>  );</code>
+            </pre>
+            <figcaption><code>manifold/pages/admin/dashboard.jsx</code></figcaption>
+            </figure>
+
+        </div>
+    </section>
+
+    <section class='slide'>
+        <div>
+            <h2>Contexts</h2>
+            <p>Global stores on the client side are fine, but what do we do on the server when there may be hundreds of requests processed at the same time? We run the load function on the server in contexts. Use them, shooting yourself in the foot is not fun.</p>
+        </div>
+    </section>
+
+    <section class='slide'>
+        <div>
+            <h2>The fetcher</h2>
+            <p>We give you a context aware fetcher. It's a very thin layer, so ideally it should be really simple to write your own transport for your backend. The fetcher need to be context aware on the server, so that the injected requests can carry a cookie with them.</p>
+        </div>
+    </section>
+
+    <section class='slide'>
+        <div>
+            <h2>A router</h2>
+            <p>The router routes requests on the client side using flux stores, so you can have as easy access to state and history. On the server side it's there to handle any possible route changes (redirects).</p>
+        </div>
+    </section>
+
+    <section class='slide'>
+        <div>
+            <h2>Caveats</h2>
+            <ol>
+                <li>Of course writing pages fully isomorphically drastically cuts the amount of stuff one can do. You have to be mindful what you're doing, a framework is no magic bullet</li>
+                <li>The only fully isomorphic authentication scheme must be cookie based at some point, as the first request must be authenticated</li>
+            </ol>
+        </div>
+    </section>
+
+    <section class='slide'>
+        <div>
+            <h2>Where to go from now</h2>
+            <ol>
+                <li>There is an example app called <a href='https://github.com/mkawalec/manifold'>manifold</a>. Please, please take a look at it to see how a working app works. You'll need docker and fig.</li>
+                <li>We need to develop an elegant way to pass the state to a new route (ie. we would like to display an alert)</li>
+                <li>Take a look at <a href='https://github.com/colonyamerican/fluxApp'>FluxApp itself</a> it's reasonably well documented</li>
+            </ol>
+        </div>
+    </section>
 
     <div class="progress">
         <div></div>
